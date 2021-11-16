@@ -40,10 +40,13 @@ defmodule PlugProxy.Response do
 
   @doc """
   Run all before_send callbacks and set the connection state.
+
+  🤷 This function should do a `conn = Enum.reduce(before_send, conn, & &1.(&2))`
+  but %Plug.Conn{before_send: before_send} doesn't exist in latest Plug version (was 1.6.1, current 1.12.1)
+  Since we don't need callbacks this part is useless - @awea 20211116
   """
   @spec before_send(Plug.Conn.t(), term) :: Plug.Conn.t()
-  def before_send(%Plug.Conn{before_send: before_send} = conn, state) do
-    conn = Enum.reduce(before_send, conn, & &1.(&2))
+  def before_send(conn, state) do
     %{conn | state: state}
   end
 

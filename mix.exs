@@ -13,7 +13,6 @@ defmodule PlugProxy.Mixfile do
       elixirc_paths: elixirc_paths(Mix.env()),
       deps: deps(),
       package: package(),
-      lockfile: lockfile(),
       test_coverage: [tool: ExCoveralls],
       preferred_cli_env: preferred_cli_env(),
       source_url: @github_link,
@@ -25,17 +24,10 @@ defmodule PlugProxy.Mixfile do
   defp elixirc_paths(:test), do: ["lib", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
-  defp lockfile do
-    case System.get_env("COWBOY_VERSION") do
-      "1" <> _ -> "mix-cowboy1.lock"
-      _ -> "mix.lock"
-    end
-  end
-
   defp deps do
     [
-      {:cowboy, "~> 1.0 or ~> 2.4"},
-      {:plug, "~> 1.5"},
+      {:plug_cowboy, "~> 2.0"},
+      {:plug, "~> 1.0"},
       {:hackney, "~> 1.10"},
       {:ex_doc, "~> 0.19", only: :dev, runtime: false},
       {:excoveralls, "~> 0.7", only: :test, runtime: false},
